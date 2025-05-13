@@ -36,4 +36,5 @@ jobs:
         format: "cyclonedx-json"
         output-file: juice-sbom.json
         image: "localbuild/testimage:latest"
+        artifact-name: ${{ github.sha }}spdx
         dependency-snapshot: true
