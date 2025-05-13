@@ -33,7 +33,8 @@ jobs:
     - name: Scan the image and upload dependency results
       uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
       with:
-	format: cyclonedx-json
+        format: "cyclonedx-json"
+        output-file: juice-sbom.json
         image: "localbuild/testimage:latest"
         artifact-name: juice-sbom.json
         dependency-snapshot: true
