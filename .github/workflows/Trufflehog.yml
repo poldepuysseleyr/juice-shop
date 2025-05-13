@@ -21,8 +21,7 @@ jobs:
         continue-on-error: true 
         with: 
           head: master 
-          extra_args: --results=verified,unknown
-          scan-arguments: "--detectors"
+          extra_args: --results=verified,unknown --include-detectors="all"
       - name: Scan Results Status 
         if: steps.trufflehog.outcome == 'failure' 
         run: exit 1
