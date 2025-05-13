@@ -1,33 +1,20 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow checks out code, builds an image, performs a container image
-# scan with Anchore's Syft tool, and uploads the results to the GitHub Dependency
-# submission API.
-
-# For more information on the Anchore sbom-action usage
-# and parameters, see https://github.com/anchore/sbom-action. For more
-# information about the Anchore SBOM tool, Syft, see
-# https://github.com/anchore/syft
 name: DAST
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
 permissions:
   contents: write
 
 jobs:
-    DAST:
+  DAST:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4  
-      - name: Install Heroku CLI 
+      - uses: actions/checkout@v4
+      - name: Install Heroku CLI
         run: |
-          curl https://cli-assets.heroku.com/install.sh | sh 
+          curl https://cli-assets.heroku.com/install.sh | sh
       - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
         with:
           heroku_api_key: HRKU-90822da0-9ae8-4371-b444-35d905682e91
@@ -36,5 +23,5 @@ jobs:
       - name: DAST OWASP ZAP scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-    # Target URL
-          target: https://secdevops2.herokuapp.com/#/
+          # Target URL
+          target: https://secdevops2-d05fffd4b527.herokuapp.com/
