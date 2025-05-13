@@ -21,20 +21,18 @@ permissions:
   contents: write
 
 jobs:
-  Anchore-Build-Scan:
-    permissions:
-      contents: write # required to upload to the Dependency submission API
+  SCA:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-    - name: Scan the image and upload dependency results
-      uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
-      with:
-        format: "cyclonedx-json"
-        output-file: juice-sbom.json
-        image: "localbuild/testimage:latest"
-        artifact-name: ${{ github.sha }}spdx
-        dependency-snapshot: true
+      - name: "Checkout git repository"
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
+      - name: "Use Node.js 18"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install
+      - name: Create SBOM step
+  # see for usage: https://www.npmjs.com/package/%40cyclonedx/cyclonedx-npm
+        run: npx @cyclonedx/cyclonedx-npm --output-format JSON --output-file sbom.json --verbose package.json
+      - name: curl
+        run: "curl -X POST -H 'X-Api-Key: odt_j5TEn8Qe_oPIpMDxzR8kXFsI6s8GJt8vQtixB4NIY' -F 'project=9d6de696-964b-4888-8f5e-a64a21b1b7b1' -F 'bom=@sbom.json' https://dependency.portasecura.com/api/v1/bom"
